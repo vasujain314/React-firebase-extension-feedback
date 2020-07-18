@@ -16,7 +16,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-class Student extends Component {
+class Uninstallform extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,4 +88,4 @@ class Student extends Component {
         );
     }
 }
-export default Student;
+export default Uninstallform;

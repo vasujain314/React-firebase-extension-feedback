@@ -1,4 +1,14 @@
 {
+   "users":{
+        "requestly":{
+            "password":"Adminrequestly",
+            "extension":"requestly"
+        },
+        "adblock":{
+            "password":"Adminadblock",
+            "extension":"adblock"
+        }
+   },
     "requestly":{
         "1":{
             "reason":"hell0"
