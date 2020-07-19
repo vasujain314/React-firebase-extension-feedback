@@ -10,19 +10,19 @@
         }
    },
     "requestly":{
-        "1":{
-            "reason":"hell0"
+        "Expensive":{
+            "count":0
         },
-        "2":{
-            "reason":"hell0"
+        "Not useful":{
+            "count":0
         }
     },
     "adblock":{
-        "1":{
-            "reason":"hell0"
+        "Expensive":{
+            "count":0
         },
-        "2":{
-            "reason":"hell0"
+        "Not useful":{
+            "count":0
         }
     }
 

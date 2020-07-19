@@ -20,30 +20,39 @@ class Uninstallform extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            reason: ''
+            reason: '',
+            list:[]
         }
-        this.Change = this.Change.bind(this);
-        this.press = this.press.bind(this);
     }
-    Change(e) {
+    Change=(e)=> {
         this.setState({
             [e.target.name]: e.target.type === 'number' ? parseInt(e.target.value) : e.target.value,
         });
     }
-    press(e) {
+     componentDidMount(){
+        var result =this;
+        var list =  firebase.database().ref(this.props.match.params.extension);
+        list.on('value', function (snapshot) {
+            console.log(snapshot.val());
+            result.setState({
+                list:snapshot.val()
+          })
+        });
+    }
+    submit=(e)=> {
         e.preventDefault();
-        var userId = 0;
-        var starCountRef = firebase.database().ref(this.props.match.params.extension);
+        var count = 0;
+        var starCountRef = firebase.database().ref(this.props.match.params.extension).child(this.state.reason);
                 starCountRef.on('value', function (snapshot) {
                     console.log(snapshot.val());
-                    userId= snapshot.val().length;
+                    count= snapshot.val().count+1;
         });
         if (e.target.innerText === "submit") {
             this.setState({
                 redirect: true,
             }, () => {    
-                firebase.database().ref(this.props.match.params.extension).child(userId).set({
-                    reason: this.state.reason
+                firebase.database().ref(this.props.match.params.extension).child(this.state.reason).set({
+                    count:count
                 }).then((data) => {
                     //success callback
                     console.log('data ', data)
@@ -56,29 +65,32 @@ class Uninstallform extends Component {
         }
     }
     render() {
-        console.log(this.props);
+        var home = this.state.list;
+        let itemsToRender=[];
+        var k = Object.keys(home);
+        for (let i = 0; i <= k.length-1; i++) {             
+            itemsToRender.push(<option value={k[i]}>{k[i]}</option>);   
+       }
         return (
             <div>
                 <div className='jumbotron'><h1 style={{ textAlign: 'center' }}>{this.props.match.params.extension} </h1></div>
-                <div className='container'>
+                <div className='container' align='center'>
                     <form className="center">
-                        <div className="col-md-4 center boundary">
+                        <div className="col-md-6 center boundary">
                             <div className="form-row">
                                 <div><p>Please state reason for uninstalling {this.props.match.params.extension}</p></div>
                                 <br />
-                                <div className="form-group col-md-11 center Text-center">
+                                <div className="form-group">
 
                                     <select value={this.state.value} onChange={this.Change} name="reason" style={{ width: 300 + 'px' }}>
                                         <option value="">choose a reason</option>
-                                        <option value="Extension is costly">Extension is costly</option>
-                                        <option value="Not useful">Not useful</option>
-                                        <option value="its confusing">its confusing</option>
+                                            {itemsToRender}
                                     </select>
                                 </div>
                             </div>
                             <div className="form-row center">
-                                <div className="form-group col-md-5 center text-center">
-                                    <button type="submit" onClick={this.press} className="btn btn-primary ">submit</button>
+                                <div className="form-group col-md-6 center text-center">
+                                    <button type="submit" onClick={this.submit} className="btn btn-primary ">submit</button>
                                 </div>
                             </div>
                         </div>
