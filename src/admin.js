@@ -9,6 +9,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 
 
 class Admin extends Component {
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -16,6 +18,8 @@ class Admin extends Component {
             reason: "",
         }
     }
+
+    
     componentDidMount() {
         var url = this.props.history
         var user = localStorage.getItem('user')
@@ -25,7 +29,7 @@ class Admin extends Component {
         }
     }
     Change = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         this.setState({
             [e.target.name]: e.target.type === 'number' ? parseInt(e.target.value) : e.target.value,
         });
@@ -38,7 +42,7 @@ class Admin extends Component {
         return;
 
     }
-    Updatez = (a) => {
+    Update = (a) => {
         console.log("param A" + a);
         var b= document.getElementById(a).value
         if (window.confirm('Are you sure want to update this?')) {
@@ -57,7 +61,7 @@ class Admin extends Component {
         document.getElementById(a).value='';
         }
     }
-    Deletez = (a) => {
+    Delete = (a) => {
         console.log(a);
         console.log("param A" + a);
         if (window.confirm('Are you sure want to update this?')) {
@@ -71,26 +75,21 @@ class Admin extends Component {
     }
     }
     create = (e) => {
-        firebase.database().ref(localStorage.getItem('user')).child(this.state.reason).set({
+
+        var input = document.getElementById('my-input').value;
+        firebase.database().ref(localStorage.getItem('user')).child(input).set({
             count: 0
         }).then((data) => {
-            //success callback
             console.log('data ', data)
             alert('Thanks for your submission');
         }).catch((error) => {
-            //error callback
             console.log('error ', error)
         })
     }
     getStats = (e) => {
-        var url = this.props.history
         var user = localStorage.getItem('user')
         document.getElementById('loading').style.display = "block";
         var res;
-        if (!user) {
-            url.push('/adminlogin');
-            return;
-        }
         var x = this;
         firebase.database().ref(user).on("value", function (snapshot) {
             res = snapshot.val();
@@ -109,8 +108,8 @@ class Admin extends Component {
             for (c in home) {
                 itemsToRender.push(<div style={{ margin: 20 + 'px' }}><FormControl><input style={{ margin: 10 + 'px' }} id={c} placeholder={c} /></FormControl>
                     <FormControl><input style={{ width: 30 + 'px', margin: 10 + 'px' }} value={home[c].count} type='text' disabled /></FormControl>
-                    <Button style={{ margin: 10 + 'px' }} variant="contained" color="primary" onClick={this.Updatez.bind(this, c)}>Update</Button>
-                    <Button style={{ margin: 10 + 'px' }} variant="contained" color="primary" onClick={this.Deletez.bind(this, c)}>Delete</Button>
+                    <Button style={{ margin: 10 + 'px' }} variant="contained" color="primary" onClick={this.Update.bind(this, c)}>Update</Button>
+                    <Button style={{ margin: 10 + 'px' }} variant="contained" color="primary" onClick={this.Delete.bind(this, c)}>Delete</Button>
                 </div>);
             }
 
@@ -141,7 +140,7 @@ class Admin extends Component {
                             <form noValidate autoComplete="off" >
                                 <FormControl>
                                     <InputLabel htmlFor="my-input">Reason</InputLabel>
-                                    <Input id="my-input" aria-describedby="my-helper-text1" onChange={this.Change} value={this.state.reason} name="reason" />
+                                    <Input id="my-input" aria-describedby="my-helper-text1" name="reason" />
                                 </FormControl>
                                 <br /><br />
                                 <Button variant="contained" color="primary" onClick={this.create}>Create</Button>

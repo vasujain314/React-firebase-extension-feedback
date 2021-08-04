@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { Component } from 'react';
-import './App.css';
+import React,{Component} from 'react';
+import './css/App.css';
 import * as firebase from 'firebase';
 
 var firebaseConfig = {
@@ -72,8 +72,9 @@ class Uninstallform extends Component {
             itemsToRender.push(<option value={k[i]}>{k[i]}</option>);   
        }
         return (
+
             <div>
-                <div className='jumbotron'><h1 style={{ textAlign: 'center' }}>{this.props.match.params.extension} </h1></div>
+                <div className='jumbotron'><h1>{this.props.match.params.extension} </h1></div>
                 <div className='container' align='center'>
                     <form className="center">
                         <div className="col-md-6 center boundary">

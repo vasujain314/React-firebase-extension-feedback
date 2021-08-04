@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
-import './App.css';
+import './css/App.css';
 import * as firebase from 'firebase';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
@@ -10,26 +10,26 @@ import { Button } from '@material-ui/core';
 class Loginform extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            username: '',
-            password: ''
-        }
-        this.Change = this.Change.bind(this);
         this.press = this.press.bind(this);
     }
-    Change(e) {
-
-        let nam = e.target.name;
-        let val = e.target.value;
-        this.setState({ [nam]: val });
+    componentDidMount() {
+        var url = this.props.history
+        var user = localStorage.getItem('user')
+        if (user) {
+            url.push('/admin');
+            return;
+        }
     }
+ 
     press(e) {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
         e.preventDefault();
         console.log('return');
         var url = this.props.history
             console.log('return');
-            var password = this.state.password;
-            firebase.database().ref('users').child(this.state.username).on("value", function (snapshot) {
+            // var password = this.state.password;
+            firebase.database().ref('users').child(username).on("value", function (snapshot) {
                 console.log(snapshot.val().password);
                 console.log(snapshot.val().extension);
                 if (password === snapshot.val().password) {
@@ -48,18 +48,17 @@ class Loginform extends Component {
             </div>
             <div style={{
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
+                justifyContent: "center"
             }}>
                 <form noValidate autoComplete="off">
                     <FormControl>
                         <InputLabel htmlFor="my-input">Username</InputLabel>
-                        <Input id="my-input" aria-describedby="my-helper-text1" onChange={this.Change} name="username" />
+                        <Input id="username" aria-describedby="my-helper-text1" value="requestly" name="username" />
                     </FormControl>
                     <br></br>
                     <FormControl>
                         <InputLabel htmlFor="my-input2">password</InputLabel>
-                        <Input id="my-input2" aria-describedby="my-helper-text2" onChange={this.Change} name="password" />
+                        <Input id="password" aria-describedby="my-helper-text2"  value ="Adminrequestly" name="password" />
                     </FormControl>
                     <br/><br/>
                         <Button type="Login" variant="contained" color="primary" onClick={this.press}>Login</Button>
